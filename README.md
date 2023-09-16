@@ -1,5 +1,8 @@
 # Simple-TodoList-Node
-A simple to-do list web app written in Javascript. Load database URI through .env file.
+A simple to-do list web app written in Javascript. Database use MongoDB. Load database URI through .env file.
+
+Prerequisite:
+MongoDB Atlas database (cloud) or a local installation.
 
 To get started.
 1. Create .env file on the root directory

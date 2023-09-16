@@ -1,0 +1,61 @@
+<%- include("partials/header.ejs") %>
+
+<% 
+    var placeholderText, listHeader;
+
+    if (locals.taskType !== undefined) {
+        switch (taskType) {
+            case 0:
+                placeholderText = 'Add today\'s task';
+                listHeader = new Date().toDateString();
+                break;
+            
+            case 1:
+                placeholderText = 'Add work\'s task';
+                listHeader = 'Work Task';
+                break;
+        
+            default:
+                break;
+        }
+    }
+%>
+
+<div class="container-fluid">
+    <div class="container mt-5 col-lg-4 col-md-6 col-sm-8">
+        <% if (locals.taskType !== undefined && locals.tasks != undefined) { %>
+
+            <h1 class="mt-5 text-center alert alert-primary"><%= listHeader %></h1>
+
+            <div class="form-control">
+                <form action="/submit" method="post">
+                    <div class="input-group my-3">
+                        <input type="text" class="form-control form-control-lg" name="name" placeholder="<%= placeholderText  %>">
+                        <input type="hidden" name="taskType" value="<%= taskType %>">
+                        <input type="submit" class="btn btn-success" value="Add">
+                    </div>
+                </form>
+                
+                <% tasks.forEach((task) => { %>
+                    <form action="/check-task" method="post">
+                        <input type="hidden" name="id" value="<%= task.id %>">
+                        <input type="hidden" name="taskType" value="<%= taskType %>">
+                        <input type="hidden" name="isDone" value="<%= task.isDone %>">
+                        <div class="input-group mb-1">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0" type="checkbox" onchange="this.form.submit()" <%= task.isDone ? 'checked' : '' %>>
+                            </div>
+                            <p class="form-control mb-0 <%= task.isDone ? 'strikethrough' : '' %>"><%= task.name %></p>
+                        </div>
+                    </form>
+                <% }); %>
+                <form action="/delete-task" method="post">
+                    <input type="hidden" name="taskType" value="<%= taskType %>">
+                    <input class="btn btn-danger btn-lg w-100 my-3" type="submit" value="Delete completed task">
+                </form>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include("partials/footer.ejs") %>
